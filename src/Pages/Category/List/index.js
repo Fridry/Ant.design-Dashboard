@@ -24,16 +24,19 @@ import Layout from "../../../Components/Layout";
 import api from "../../../services/api";
 
 const { Title } = Typography;
+const { TextArea } = Input;
 
 const EditableCell = ({
   editing,
   dataIndex,
   title,
+  inputType,
   record,
   index,
   children,
   ...restProps
 }) => {
+  const inputNode = inputType === "area" ? <TextArea /> : <Input />;
   return (
     <td {...restProps}>
       {editing ? (
@@ -46,11 +49,10 @@ const EditableCell = ({
             {
               required: true,
               message: `Campo ${title} obrigatório!`,
-              type: title === "Email" ? "email" : "string",
             },
           ]}
         >
-          <Input />
+          {inputNode}
         </Form.Item>
       ) : (
         children
@@ -68,7 +70,7 @@ const List = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/company");
+    const response = await api.get("/category");
 
     setState(response.data);
     setLoading(false);
@@ -81,10 +83,7 @@ const List = () => {
   const data = state.map((row) => ({
     key: row._id,
     name: row.name,
-    email: row.email,
-    phone: row.phoneNumber,
-    address: row.address,
-    city: row.city,
+    description: row.description,
   }));
 
   const isEditing = (record) => record.key === editingKey;
@@ -92,10 +91,7 @@ const List = () => {
   const edit = (record) => {
     form.setFieldsValue({
       name: "",
-      email: "",
-      phone: "",
-      address: "",
-      city: "",
+      description: "",
       ...record,
     });
     setEditingKey(record.key);
@@ -109,7 +105,7 @@ const List = () => {
     try {
       const rowData = await form.validateFields();
 
-      await api.put(`/company/${key}`, rowData);
+      await api.put(`/category/${key}`, rowData);
 
       form.resetFields();
 
@@ -125,7 +121,7 @@ const List = () => {
 
   const handleDelete = async (key) => {
     try {
-      await api.delete(`/company/${key}`);
+      await api.delete(`/category/${key}`);
 
       setState(data.filter((d) => d.key !== key));
 
@@ -199,28 +195,11 @@ const List = () => {
       defaultSortOrder: "ascend",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Descrição",
+      dataIndex: "description",
+      key: "description",
       editable: true,
-    },
-    {
-      title: "Telefone",
-      dataIndex: "phone",
-      key: "phone",
-      editable: true,
-    },
-    {
-      title: "Endereço",
-      dataIndex: "address",
-      key: "address",
-      editable: true,
-    },
-    {
-      title: "Cidade",
-      dataIndex: "city",
-      key: "city",
-      editable: true,
+      width: "60%",
     },
     {
       title: "Ações",
@@ -239,6 +218,7 @@ const List = () => {
       ...col,
       onCell: (record) => ({
         record,
+        inputType: col.dataIndex === "description" ? "area" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),

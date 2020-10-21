@@ -34,7 +34,7 @@ const Sidebar = () => {
         theme="dark"
         defaultSelectedKeys={["/"]}
         selectedKeys={[location.pathname]}
-        defaultOpenKeys={["sub1"]}
+        defaultOpenKeys={["sub5"]}
         mode="inline"
       >
         <Menu.Item key="/" icon={<HomeOutlined />}>
@@ -50,8 +50,12 @@ const Sidebar = () => {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" icon={<GroupOutlined />} title="Unidades">
-          <Menu.Item key="4">Team 1</Menu.Item>
-          <Menu.Item key="5">Team 2</Menu.Item>
+          <Menu.Item key="/unit/new">
+            <NavLink to="/unit/new">Cadastrar unidade</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/unit/list">
+            <NavLink to="/unit/list">Listar unidades</NavLink>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" icon={<SettingOutlined />} title="Ativos">
           <Menu.Item key="6">Team 1</Menu.Item>
@@ -62,8 +66,12 @@ const Sidebar = () => {
           <Menu.Item key="9">Team 2</Menu.Item>
         </SubMenu>
         <SubMenu key="sub5" icon={<ProfileOutlined />} title="Categorias">
-          <Menu.Item key="10">Team 1</Menu.Item>
-          <Menu.Item key="11">Team 2</Menu.Item>
+          <Menu.Item key="/category/new">
+            <NavLink to="/category/new">Cadastrar categoria</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/category/list">
+            <NavLink to="/category/list">Listar categorias</NavLink>
+          </Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>

@@ -5,6 +5,10 @@ import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
 import NewCompany from "./Pages/Company/New";
 import ListCompany from "./Pages/Company/List";
+import NewCategory from "./Pages/Category/New";
+import ListCategory from "./Pages/Category/List";
+import NewUnit from "./Pages/Unit/New";
+import ListUnit from "./Pages/Unit/List";
 
 const Routes = () => {
   return (
@@ -20,6 +24,22 @@ const Routes = () => {
 
         <Route exact path="/company/list">
           <ListCompany />
+        </Route>
+
+        <Route exact path="/category/new">
+          <NewCategory />
+        </Route>
+
+        <Route exact path="/category/list">
+          <ListCategory />
+        </Route>
+
+        <Route exact path="/unit/new">
+          <NewUnit />
+        </Route>
+
+        <Route exact path="/unit/list">
+          <ListUnit />
         </Route>
 
         <Route path="*">
