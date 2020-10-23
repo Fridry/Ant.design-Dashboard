@@ -68,7 +68,7 @@ const List = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/unit");
+    const response = await api.get("/users");
 
     setState(response.data);
     setLoading(false);
@@ -83,9 +83,7 @@ const List = () => {
     name: row.name,
     email: row.email,
     phoneNumber: row.phoneNumber,
-    address: row.address,
-    city: row.city,
-    company: row.company.name,
+    unit: row.unit.name,
   }));
 
   const isEditing = (record) => record.key === editingKey;
@@ -95,8 +93,6 @@ const List = () => {
       name: "",
       email: "",
       phoneNumber: "",
-      address: "",
-      city: "",
       ...record,
     });
     setEditingKey(record.key);
@@ -110,23 +106,23 @@ const List = () => {
     try {
       const rowData = await form.validateFields();
 
-      await api.put(`/unit/${key}`, rowData);
+      await api.put(`/users/${key}`, rowData);
 
       form.resetFields();
 
-      message.info("Unidade atualizada com sucesso.");
+      message.info("Usuário atualizado com sucesso.");
 
       setEditingKey("");
 
       getData();
     } catch (error) {
-      message.error("Erro ao atualizar unidade, tente novamente.");
+      message.error("Erro ao atualizar usuário, tente novamente.");
     }
   };
 
   const handleDelete = async (key) => {
     try {
-      await api.delete(`/unit/${key}`);
+      await api.delete(`/users/${key}`);
 
       getData();
 
@@ -212,21 +208,9 @@ const List = () => {
       editable: true,
     },
     {
-      title: "Endereço",
-      dataIndex: "address",
-      key: "address",
-      editable: true,
-    },
-    {
-      title: "Cidade",
-      dataIndex: "city",
-      key: "city",
-      editable: true,
-    },
-    {
-      title: "Empresa",
-      dataIndex: "company",
-      key: "company",
+      title: "Unidade",
+      dataIndex: "unit",
+      key: "unit",
     },
     {
       title: "Ações",

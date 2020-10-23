@@ -34,7 +34,7 @@ const Sidebar = () => {
         theme="dark"
         defaultSelectedKeys={["/"]}
         selectedKeys={[location.pathname]}
-        defaultOpenKeys={["sub5"]}
+        defaultOpenKeys={["sub4"]}
         mode="inline"
       >
         <Menu.Item key="/" icon={<HomeOutlined />}>
@@ -62,8 +62,12 @@ const Sidebar = () => {
           <Menu.Item key="7">Team 2</Menu.Item>
         </SubMenu>
         <SubMenu key="sub4" icon={<TeamOutlined />} title="Usuários">
-          <Menu.Item key="8">Team 1</Menu.Item>
-          <Menu.Item key="9">Team 2</Menu.Item>
+          <Menu.Item key="/user/new">
+            <NavLink to="/user/new">Cadastrar usuário</NavLink>
+          </Menu.Item>
+          <Menu.Item key="/user/list">
+            <NavLink to="/user/list">Listar usuários</NavLink>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="sub5" icon={<ProfileOutlined />} title="Categorias">
           <Menu.Item key="/category/new">

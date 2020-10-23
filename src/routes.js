@@ -9,6 +9,8 @@ import NewCategory from "./Pages/Category/New";
 import ListCategory from "./Pages/Category/List";
 import NewUnit from "./Pages/Unit/New";
 import ListUnit from "./Pages/Unit/List";
+import NewUser from "./Pages/Users/New";
+import ListUser from "./Pages/Users/List";
 
 const Routes = () => {
   return (
@@ -40,6 +42,14 @@ const Routes = () => {
 
         <Route exact path="/unit/list">
           <ListUnit />
+        </Route>
+
+        <Route exact path="/user/new">
+          <NewUser />
+        </Route>
+
+        <Route exact path="/user/list">
+          <ListUser />
         </Route>
 
         <Route path="*">

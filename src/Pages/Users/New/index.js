@@ -9,7 +9,7 @@ const { Option } = Select;
 
 const New = () => {
   const [form] = Form.useForm();
-  const [companies, setCompanies] = useState([]);
+  const [unities, setUnities] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const layout = {
@@ -19,9 +19,9 @@ const New = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/company");
+    const response = await api.get("/unit");
 
-    setCompanies(response.data);
+    setUnities(response.data);
     setLoading(false);
   };
 
@@ -31,25 +31,25 @@ const New = () => {
 
   const onFinish = async (values) => {
     try {
-      await api.post("/unit", values);
+      await api.post("/users", values);
 
       form.resetFields();
 
-      message.info("Unidade cadastrada com sucesso.");
+      message.info("Usuário cadastrada com sucesso.");
     } catch (error) {
-      message.error("Erro ao cadastrar unidade, tente novamente.");
+      message.error("Erro ao cadastrar usuário, tente novamente.");
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    message.error("Ocorreu um erro ao cadastrar unidade, tente novamente.");
+    message.error("Ocorreu um erro ao cadastrar usuário, tente novamente.");
   };
 
   return (
     <Layout>
       <Row>
         <Col span={18} offset={3}>
-          <Card title="Cadastrar unidade" align="start">
+          <Card title="Cadastrar usuário" align="start">
             <Form
               name="Create"
               form={form}
@@ -95,12 +95,12 @@ const New = () => {
               </Form.Item>
 
               <Form.Item
-                label="Endereço"
-                name="address"
+                label="Cargo"
+                name="position"
                 rules={[
                   {
                     required: true,
-                    message: "Campo Endereço obrigatório!",
+                    message: "Campo Cargo obrigatório!",
                   },
                 ]}
               >
@@ -108,31 +108,18 @@ const New = () => {
               </Form.Item>
 
               <Form.Item
-                label="Cidade"
-                name="city"
-                rules={[
-                  {
-                    required: true,
-                    message: "Campo Cidade obrigatório!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                name="company"
-                label="Empresa"
+                name="unit"
+                label="Unidade"
                 rules={[{ required: true }]}
               >
                 <Select
-                  placeholder="Selecione uma empresa"
+                  placeholder="Selecione uma unidade"
                   allowClear
                   loading={loading}
                 >
-                  {companies.map((company) => (
-                    <Option value={company._id} key={company._id}>
-                      {company.name}
+                  {unities.map((unit) => (
+                    <Option value={unit._id} key={unit._id}>
+                      {unit.name}
                     </Option>
                   ))}
                 </Select>
