@@ -82,7 +82,7 @@ const List = () => {
     key: row._id,
     name: row.name,
     email: row.email,
-    phone: row.phoneNumber,
+    phoneNumber: row.phoneNumber,
     address: row.address,
     city: row.city,
   }));
@@ -93,7 +93,7 @@ const List = () => {
     form.setFieldsValue({
       name: "",
       email: "",
-      phone: "",
+      phoneNumber: "",
       address: "",
       city: "",
       ...record,
@@ -206,8 +206,8 @@ const List = () => {
     },
     {
       title: "Telefone",
-      dataIndex: "phone",
-      key: "phone",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
       editable: true,
     },
     {

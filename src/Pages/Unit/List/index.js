@@ -68,7 +68,7 @@ const List = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/company");
+    const response = await api.get("/unit");
 
     setState(response.data);
     setLoading(false);
@@ -82,9 +82,10 @@ const List = () => {
     key: row._id,
     name: row.name,
     email: row.email,
-    phone: row.phoneNumber,
+    phoneNumber: row.phoneNumber,
     address: row.address,
     city: row.city,
+    company: row.company.name,
   }));
 
   const isEditing = (record) => record.key === editingKey;
@@ -93,7 +94,7 @@ const List = () => {
     form.setFieldsValue({
       name: "",
       email: "",
-      phone: "",
+      phoneNumber: "",
       address: "",
       city: "",
       ...record,
@@ -109,17 +110,17 @@ const List = () => {
     try {
       const rowData = await form.validateFields();
 
-      await api.put(`/company/${key}`, rowData);
+      await api.put(`/unit/${key}`, rowData);
 
       form.resetFields();
 
-      message.info("Empresa atualizada com sucesso.");
+      message.info("Unidade atualizada com sucesso.");
 
       setEditingKey("");
 
       getData();
     } catch (error) {
-      message.error("Erro ao atualizar empresa, tente novamente.");
+      message.error("Erro ao atualizar unidade, tente novamente.");
     }
   };
 
@@ -206,8 +207,8 @@ const List = () => {
     },
     {
       title: "Telefone",
-      dataIndex: "phone",
-      key: "phone",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
       editable: true,
     },
     {
@@ -221,6 +222,11 @@ const List = () => {
       dataIndex: "city",
       key: "city",
       editable: true,
+    },
+    {
+      title: "Empresa",
+      dataIndex: "company",
+      key: "company",
     },
     {
       title: "Ações",
@@ -261,7 +267,7 @@ const List = () => {
               columns={mergedColumns}
               rowClassName="editable-row"
               bordered
-              title={() => <Title level={5}>Empresas cadastradas</Title>}
+              title={() => <Title level={5}>Unidades cadastradas</Title>}
               size="small"
               pagination={{ position: ["bottomCenter"] }}
               loading={loading}

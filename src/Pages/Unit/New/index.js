@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Row, Col, Card, message, Select } from "antd";
 
 import api from "../../../services/api";
@@ -9,10 +9,25 @@ const { Option } = Select;
 
 const New = () => {
   const [form] = Form.useForm();
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const layout = {
     labelCol: { span: 4 },
   };
+
+  const getData = async () => {
+    setLoading(true);
+
+    const response = await api.get("/company");
+
+    setCompanies(response.data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const onFinish = async (values) => {
     try {
@@ -110,10 +125,16 @@ const New = () => {
                 label="Empresa"
                 rules={[{ required: true }]}
               >
-                <Select placeholder="Selecione uma empresa" allowClear>
-                  <Option value="male">male</Option>
-                  <Option value="female">female</Option>
-                  <Option value="other">other</Option>
+                <Select
+                  placeholder="Selecione uma empresa"
+                  allowClear
+                  loading={loading}
+                >
+                  {companies.map((company) => (
+                    <Option value={company._id} key={company._id}>
+                      {company.name}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
 
