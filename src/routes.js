@@ -11,6 +11,8 @@ import NewUnit from "./Pages/Unit/New";
 import ListUnit from "./Pages/Unit/List";
 import NewUser from "./Pages/Users/New";
 import ListUser from "./Pages/Users/List";
+import NewAsset from "./Pages/Assets/New";
+import ListAsset from "./Pages/Assets/List";
 
 const Routes = () => {
   return (
@@ -50,6 +52,14 @@ const Routes = () => {
 
         <Route exact path="/user/list">
           <ListUser />
+        </Route>
+
+        <Route exact path="/asset/new">
+          <NewAsset />
+        </Route>
+
+        <Route exact path="/asset/list">
+          <ListAsset />
         </Route>
 
         <Route path="*">

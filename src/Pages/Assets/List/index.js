@@ -68,7 +68,7 @@ const List = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/users");
+    const response = await api.get("/asset");
 
     setState(response.data);
     setLoading(false);
@@ -81,9 +81,13 @@ const List = () => {
   const data = state.map((row) => ({
     key: row._id,
     name: row.name,
-    email: row.email,
-    phoneNumber: row.phoneNumber,
-    unit: row.unit ? row.unit.name : "",
+    model: row.model,
+    year: row.year,
+    status: row.status,
+    healthscore: row.healthscore,
+    unit: row.unit.name,
+    category: row.category.name,
+    responsible: row.responsible.name,
   }));
 
   const isEditing = (record) => record.key === editingKey;
@@ -106,7 +110,7 @@ const List = () => {
     try {
       const rowData = await form.validateFields();
 
-      await api.put(`/users/${key}`, rowData);
+      await api.put(`/asset/${key}`, rowData);
 
       form.resetFields();
 
@@ -122,7 +126,7 @@ const List = () => {
 
   const handleDelete = async (key) => {
     try {
-      await api.delete(`/users/${key}`);
+      await api.delete(`/asset/${key}`);
 
       getData();
 
@@ -196,16 +200,38 @@ const List = () => {
       defaultSortOrder: "ascend",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Modelo",
+      dataIndex: "model",
+      key: "model",
       editable: true,
     },
     {
-      title: "Telefone",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      title: "Ano",
+      dataIndex: "year",
+      key: "year",
       editable: true,
+    },
+    {
+      title: "Nível de Saúde",
+      dataIndex: "healthscore",
+      key: "healthscore",
+      editable: true,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      editable: true,
+    },
+    {
+      title: "Responsável",
+      dataIndex: "responsible",
+      key: "responsible",
+    },
+    {
+      title: "categoria",
+      dataIndex: "category",
+      key: "category",
     },
     {
       title: "Unidade",
@@ -251,7 +277,7 @@ const List = () => {
               columns={mergedColumns}
               rowClassName="editable-row"
               bordered
-              title={() => <Title level={5}>Unidades cadastradas</Title>}
+              title={() => <Title level={5}>Ativos cadastrados</Title>}
               size="small"
               pagination={{ position: ["bottomCenter"] }}
               loading={loading}
