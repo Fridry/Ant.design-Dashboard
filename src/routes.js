@@ -13,6 +13,7 @@ import NewUser from "./Pages/Users/New";
 import ListUser from "./Pages/Users/List";
 import NewAsset from "./Pages/Assets/New";
 import ListAsset from "./Pages/Assets/List";
+import EditAsset from "./Pages/Assets/Edit";
 
 const Routes = () => {
   return (
@@ -61,6 +62,8 @@ const Routes = () => {
         <Route exact path="/asset/list">
           <ListAsset />
         </Route>
+
+        <Route exact path="/asset/edit" component={EditAsset} />
 
         <Route path="*">
           <NotFound />

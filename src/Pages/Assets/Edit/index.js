@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
 import {
   Form,
   Input,
@@ -18,18 +20,47 @@ import Layout from "../../../Components/Layout";
 
 const { Option } = Select;
 
-const New = () => {
+const Edit = ({ location }) => {
   const [form] = Form.useForm();
   const [unities, setUnities] = useState([]);
   const [categories, setCategories] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const history = useHistory();
+
   const [search, setSearch] = useState({
     data: [],
     value: "",
     fetching: false,
   });
+
+  const {
+    _id,
+    name,
+    description,
+    model,
+    year,
+    image,
+    status,
+    healthscore,
+    unit,
+    category,
+    responsible,
+  } = location.state.asset;
+
+  const editValues = {
+    name: name,
+    description: description,
+    model: model,
+    year: year,
+    image: image,
+    status: status,
+    healthscore: healthscore,
+    unit: unit._id,
+    category: category._id,
+    responsible: responsible._id,
+  };
 
   const layout = {
     labelCol: { span: 4 },
@@ -55,11 +86,13 @@ const New = () => {
 
   const onFinish = async (values) => {
     try {
-      await api.post("/asset", values);
+      await api.put(`/asset/${_id}`, values);
 
       form.resetFields();
 
       message.info("Ativo cadastrada com sucesso.");
+
+      goBack();
     } catch (error) {
       message.error("Erro ao cadastrar ativo, tente novamente.");
     }
@@ -85,11 +118,15 @@ const New = () => {
     });
   };
 
+  const goBack = () => {
+    history.push("/asset/list");
+  };
+
   return (
     <Layout>
       <Row>
         <Col span={18} offset={3}>
-          <Card title="Cadastrar ativos" align="start">
+          <Card title="Atualizar ativos" align="start">
             <Form
               name="Create"
               form={form}
@@ -98,6 +135,7 @@ const New = () => {
               requiredMark={false}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues={editValues}
             >
               <Form.Item
                 label="Nome"
@@ -175,6 +213,15 @@ const New = () => {
                 ]}
               >
                 <Input />
+                <img
+                  src={image}
+                  alt="Asset"
+                  style={{
+                    width: 300,
+                    display: "block",
+                    margin: "20px auto",
+                  }}
+                />
               </Form.Item>
 
               <Form.Item
@@ -255,9 +302,17 @@ const New = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Salvar
-                </Button>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Button type="primary" htmlType="submit">
+                    Atualizar
+                  </Button>
+
+                  <Button type="default" htmlType="button" onClick={goBack}>
+                    Voltar
+                  </Button>
+                </div>
               </Form.Item>
             </Form>
           </Card>
@@ -267,4 +322,4 @@ const New = () => {
   );
 };
 
-export default New;
+export default Edit;

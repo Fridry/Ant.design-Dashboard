@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   Button,
   Row,
@@ -10,60 +12,20 @@ import {
   message,
   Typography,
   Form,
-  Input,
 } from "antd";
 
-import {
-  EditOutlined,
-  DeleteOutlined,
-  CheckOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import Layout from "../../../Components/Layout";
+import Modal from "../../../Components/Modal";
 import api from "../../../services/api";
 
 const { Title } = Typography;
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Campo ${title} obrigatório!`,
-              type: title === "Email" ? "email" : "string",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const List = () => {
   const [form] = Form.useForm();
   const [state, setState] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [editingKey, setEditingKey] = useState("");
 
   const getData = async () => {
     setLoading(true);
@@ -90,40 +52,6 @@ const List = () => {
     responsible: row.responsible.name,
   }));
 
-  const isEditing = (record) => record.key === editingKey;
-
-  const edit = (record) => {
-    form.setFieldsValue({
-      name: "",
-      email: "",
-      phoneNumber: "",
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key) => {
-    try {
-      const rowData = await form.validateFields();
-
-      await api.put(`/asset/${key}`, rowData);
-
-      form.resetFields();
-
-      message.info("Usuário atualizado com sucesso.");
-
-      setEditingKey("");
-
-      getData();
-    } catch (error) {
-      message.error("Erro ao atualizar usuário, tente novamente.");
-    }
-  };
-
   const handleDelete = async (key) => {
     try {
       await api.delete(`/asset/${key}`);
@@ -136,55 +64,38 @@ const List = () => {
     }
   };
 
-  const actions = (record) => {
-    const editable = isEditing(record);
+  const actions = (record) => (
+    <Space size="middle" align="center">
+      <Modal asset={state[state.findIndex((i) => i._id === record.key)]} />
 
-    return editable ? (
-      <Space size="middle" align="center">
-        <Button
-          type="primary"
-          icon={<CheckOutlined />}
-          size={25}
-          style={{ background: "#52c41a", border: "none" }}
-          title="Salvar"
-          onClick={() => save(record.key)}
-        />
-
-        <Button
-          type="primary"
-          icon={<CloseOutlined />}
-          size={25}
-          style={{ background: "#595959", border: "none" }}
-          title="Cancelar"
-          onClick={cancel}
-        />
-      </Space>
-    ) : data.length >= 1 ? (
-      <Space size="middle" align="center">
+      <Link
+        to={{
+          pathname: "/asset/edit",
+          state: { asset: state[state.findIndex((i) => i._id === record.key)] },
+        }}
+      >
         <Button
           type="primary"
           icon={<EditOutlined />}
           size={25}
           style={{ background: "#ffec3d", border: "none" }}
           title="Editar"
-          disabled={editingKey !== ""}
-          onClick={() => edit(record)}
         />
+      </Link>
 
-        <Popconfirm
-          title="Deseja excluir este registro?"
-          onConfirm={() => handleDelete(record.key)}
-        >
-          <Button
-            type="primary"
-            danger
-            icon={<DeleteOutlined />}
-            title="Excluir"
-          />
-        </Popconfirm>
-      </Space>
-    ) : null;
-  };
+      <Popconfirm
+        title="Deseja excluir este registro?"
+        onConfirm={() => handleDelete(record.key)}
+      >
+        <Button
+          type="primary"
+          danger
+          icon={<DeleteOutlined />}
+          title="Excluir"
+        />
+      </Popconfirm>
+    </Space>
+  );
 
   const sorter = (a, b) =>
     isNaN(a) && isNaN(b) ? (a || "").localeCompare(b || "") : a - b;
@@ -203,35 +114,31 @@ const List = () => {
       title: "Modelo",
       dataIndex: "model",
       key: "model",
-      editable: true,
     },
     {
       title: "Ano",
       dataIndex: "year",
       key: "year",
-      editable: true,
     },
     {
       title: "Nível de Saúde",
       dataIndex: "healthscore",
       key: "healthscore",
-      editable: true,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      editable: true,
+    },
+    {
+      title: "Categoria",
+      dataIndex: "category",
+      key: "category",
     },
     {
       title: "Responsável",
       dataIndex: "responsible",
       key: "responsible",
-    },
-    {
-      title: "categoria",
-      dataIndex: "category",
-      key: "category",
     },
     {
       title: "Unidade",
@@ -246,35 +153,14 @@ const List = () => {
     },
   ];
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-
   return (
     <Layout>
       <Row>
         <Col span={24}>
           <Form form={form} component={false}>
             <Table
-              components={{
-                body: {
-                  cell: EditableCell,
-                },
-              }}
               dataSource={data}
-              columns={mergedColumns}
+              columns={columns}
               rowClassName="editable-row"
               bordered
               title={() => <Title level={5}>Ativos cadastrados</Title>}
