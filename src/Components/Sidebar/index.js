@@ -25,6 +25,16 @@ const Sidebar = () => {
     setCollapsed(collapsed);
   };
 
+  const persistKey = (drop) => {
+    localStorage.clear();
+
+    localStorage.setItem("@dropdowKey", drop);
+  };
+
+  const getKey = () => {
+    return localStorage.getItem("@dropdowKey");
+  };
+
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo">
@@ -34,51 +44,79 @@ const Sidebar = () => {
         theme="dark"
         defaultSelectedKeys={["/"]}
         selectedKeys={[location.pathname]}
-        defaultOpenKeys={["sub3"]}
+        defaultOpenKeys={[getKey()]}
         mode="inline"
       >
         <Menu.Item key="/" icon={<HomeOutlined />}>
           <NavLink to="/">Home</NavLink>
         </Menu.Item>
 
-        <SubMenu key="sub1" icon={<ShopOutlined />} title="Empresas">
+        <SubMenu key="company" icon={<ShopOutlined />} title="Empresas">
           <Menu.Item key="/company/new">
-            <NavLink to="/company/new">Cadastrar empresa</NavLink>
+            <NavLink to="/company/new" onClick={() => persistKey("company")}>
+              Cadastrar empresa
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/company/list">
-            <NavLink to="/company/list">Listar empresas</NavLink>
+            <NavLink to="/company/list" onClick={() => persistKey("company")}>
+              Listar empresas
+            </NavLink>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<GroupOutlined />} title="Unidades">
+        <SubMenu key="unit" icon={<GroupOutlined />} title="Unidades">
           <Menu.Item key="/unit/new">
-            <NavLink to="/unit/new">Cadastrar unidade</NavLink>
+            <NavLink to="/unit/new" onClick={() => persistKey("unit")} unit>
+              Cadastrar unidade
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/unit/list">
-            <NavLink to="/unit/list">Listar unidades</NavLink>
+            <NavLink to="/unit/list" onClick={() => persistKey("unit")} unit>
+              Listar unidades
+            </NavLink>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub3" icon={<SettingOutlined />} title="Ativos">
+        <SubMenu key="asset" icon={<SettingOutlined />} title="Ativos">
           <Menu.Item key="/asset/new">
-            <NavLink to="/asset/new">Cadastrar ativo</NavLink>
+            <NavLink to="/asset/new" onClick={() => persistKey("asset")}>
+              Cadastrar ativo
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/asset/list">
-            <NavLink to="/asset/list">Listar ativos</NavLink>
+            <NavLink to="/asset/list" onClick={() => persistKey("asset")}>
+              Listar ativos
+            </NavLink>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub4" icon={<TeamOutlined />} title="Usuários">
+        <SubMenu key="user" icon={<TeamOutlined />} title="Usuários">
           <Menu.Item key="/user/new">
-            <NavLink to="/user/new">Cadastrar usuário</NavLink>
+            <NavLink to="/user/new" onClick={() => persistKey("user")}>
+              Cadastrar usuário
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/user/list">
-            <NavLink to="/user/list">Listar usuários</NavLink>
+            <NavLink to="/user/list" onClick={() => persistKey("user")}>
+              Listar usuários
+            </NavLink>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub5" icon={<ProfileOutlined />} title="Categorias">
+        <SubMenu key="category" icon={<ProfileOutlined />} title="Categorias">
           <Menu.Item key="/category/new">
-            <NavLink to="/category/new">Cadastrar categoria</NavLink>
+            <NavLink
+              to="/category/new"
+              onClick={() => persistKey("category")}
+              category
+            >
+              Cadastrar categoria
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="/category/list">
-            <NavLink to="/category/list">Listar categorias</NavLink>
+            <NavLink
+              to="/category/list"
+              onClick={() => persistKey("category")}
+              category
+            >
+              Listar categorias
+            </NavLink>
           </Menu.Item>
         </SubMenu>
       </Menu>
