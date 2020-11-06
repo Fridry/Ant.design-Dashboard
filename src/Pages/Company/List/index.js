@@ -13,11 +13,14 @@ import {
   Input,
 } from "antd";
 
+import { Link } from "react-router-dom";
+
 import {
   EditOutlined,
   DeleteOutlined,
   CheckOutlined,
   CloseOutlined,
+  InfoOutlined,
 } from "@ant-design/icons";
 
 import Layout from "../../../Components/Layout";
@@ -160,6 +163,20 @@ const List = () => {
       </Space>
     ) : data.length >= 1 ? (
       <Space size="middle" align="center">
+        <Link
+          to={{
+            pathname: `/company/info/${record.key}`,
+          }}
+        >
+          <Button
+            type="primary"
+            icon={<InfoOutlined />}
+            size={25}
+            style={{ border: "none" }}
+            title="Detalhes"
+          />
+        </Link>
+
         <Button
           type="primary"
           icon={<EditOutlined />}

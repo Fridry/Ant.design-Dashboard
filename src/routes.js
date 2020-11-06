@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
 import NewCompany from "./Pages/Company/New";
 import ListCompany from "./Pages/Company/List";
+import InfoCompany from "./Pages/Company/Info";
 import NewCategory from "./Pages/Category/New";
 import ListCategory from "./Pages/Category/List";
 import NewUnit from "./Pages/Unit/New";
@@ -30,6 +31,8 @@ const Routes = () => {
         <Route exact path="/company/list">
           <ListCompany />
         </Route>
+
+        <Route exact path="/company/info/:id" component={InfoCompany} />
 
         <Route exact path="/category/new">
           <NewCategory />
