@@ -41,7 +41,7 @@ const New = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = () => {
     message.error("Ocorreu um erro ao cadastrar unidade, tente novamente.");
   };
 

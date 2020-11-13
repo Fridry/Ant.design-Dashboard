@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Home from "./Pages/Home";
+import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
 import NewCompany from "./Pages/Company/New";
 import ListCompany from "./Pages/Company/List";
@@ -22,6 +23,10 @@ const Routes = () => {
       <Switch>
         <Route exact path="/">
           <Home />
+        </Route>
+
+        <Route exact path="/login">
+          <Login />
         </Route>
 
         <Route exact path="/company/new">
