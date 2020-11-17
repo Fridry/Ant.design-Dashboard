@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 
 import {
@@ -65,10 +66,15 @@ const List = () => {
   const [loading, setLoading] = useState(false);
   const [editingKey, setEditingKey] = useState("");
 
+  const companyId = localStorage.getItem("@companyId");
+  const companyName = localStorage.getItem("@companyName");
+
+  const companyQuery = companyId === "admin" ? "" : `company=${companyId}`;
+
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/unit");
+    const response = await api.get(`/unit?${companyQuery}`);
 
     setState(response.data);
     setLoading(false);
@@ -224,17 +230,19 @@ const List = () => {
       editable: true,
     },
     {
-      title: "Empresa",
-      dataIndex: "company",
-      key: "company",
-    },
-    {
       title: "Ações",
       dataIndex: "actions",
       key: "actions",
       render: (_, record) => actions(record),
     },
   ];
+
+  if (companyName === "Administrador")
+    columns.splice(1, 0, {
+      title: "Empresa",
+      dataIndex: "company",
+      key: "company",
+    });
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {

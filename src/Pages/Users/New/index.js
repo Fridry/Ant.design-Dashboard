@@ -10,7 +10,11 @@ const { Option } = Select;
 const New = () => {
   const [form] = Form.useForm();
   const [unities, setUnities] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const companyName = localStorage.getItem("@companyName");
+  const companyId = localStorage.getItem("@companyId");
 
   const layout = {
     labelCol: { span: 4 },
@@ -19,9 +23,11 @@ const New = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/unit");
+    const unitResponse = await api.get("/unit");
+    const companyResponse = await api.get("/company");
 
-    setUnities(response.data);
+    setUnities(unitResponse.data);
+    setCompanies(companyResponse.data);
     setLoading(false);
   };
 
@@ -31,7 +37,13 @@ const New = () => {
 
   const onFinish = async (values) => {
     try {
-      await api.post("/users", values);
+      let data = values;
+
+      if (companyName !== "Administrador") {
+        data = { ...values, company: companyId };
+      }
+
+      await api.post("/users", data);
 
       form.resetFields();
 
@@ -124,6 +136,26 @@ const New = () => {
                   ))}
                 </Select>
               </Form.Item>
+
+              {companyName === "Administrador" && (
+                <Form.Item
+                  name="company"
+                  label="Empresa"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Selecione uma empresa"
+                    allowClear
+                    loading={loading}
+                  >
+                    {companies.map((company) => (
+                      <Option value={company._id} key={company._id}>
+                        {company.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
 
               <Form.Item>
                 <Button type="primary" htmlType="submit">

@@ -27,17 +27,22 @@ const List = () => {
   const [state, setState] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const companyId = localStorage.getItem("@companyId");
+
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/asset");
+    const response = await api.get(`asset?company=${companyId}`);
 
     setState(response.data);
     setLoading(false);
   };
 
+  // console.log(state);
+
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const data = state.map((row) => ({

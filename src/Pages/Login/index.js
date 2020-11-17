@@ -91,7 +91,7 @@ const Login = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Salvar
+              Acessar
             </Button>
           </Form.Item>
         </Form>

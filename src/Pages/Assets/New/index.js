@@ -21,9 +21,13 @@ const { Option } = Select;
 const New = () => {
   const [form] = Form.useForm();
   const [unities, setUnities] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [categories, setCategories] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const companyName = localStorage.getItem("@companyName");
+  const companyId = localStorage.getItem("@companyId");
 
   const [search, setSearch] = useState({
     data: [],
@@ -39,10 +43,12 @@ const New = () => {
     setLoading(true);
 
     const unitResponse = await api.get("/unit");
+    const companyResponse = await api.get("/company");
     const categoryResponse = await api.get("/category");
     const userResponse = await api.get("/users");
 
     setUnities(unitResponse.data);
+    setCompanies(companyResponse.data);
     setCategories(categoryResponse.data);
     setUsers(userResponse.data);
 
@@ -55,7 +61,13 @@ const New = () => {
 
   const onFinish = async (values) => {
     try {
-      await api.post("/asset", values);
+      let data = values;
+
+      if (companyName !== "Administrador") {
+        data = { ...values, company: companyId };
+      }
+
+      await api.post("/asset", data);
 
       form.resetFields();
 
@@ -68,14 +80,6 @@ const New = () => {
   const onFinishFailed = (errorInfo) => {
     message.error("Ocorreu um erro ao cadastrar ativo, tente novamente.");
   };
-
-  // const fetchUser = async (value) => {
-  //   setSearch({ data: [], fetching: true });
-
-  //   const response = await api.get("/users");
-
-  //   setSearch({ data: response.data, fetching: false });
-  // };
 
   const handleChange = (value) => {
     setSearch({
@@ -219,6 +223,26 @@ const New = () => {
                   ))}
                 </Select>
               </Form.Item>
+
+              {companyName === "Administrador" && (
+                <Form.Item
+                  name="company"
+                  label="Empresa"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    placeholder="Selecione uma empresa"
+                    allowClear
+                    loading={loading}
+                  >
+                    {companies.map((company) => (
+                      <Option value={company._id} key={company._id}>
+                        {company.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
 
               <Form.Item
                 name="responsible"
