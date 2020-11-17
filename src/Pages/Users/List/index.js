@@ -65,10 +65,18 @@ const List = () => {
   const [loading, setLoading] = useState(false);
   const [editingKey, setEditingKey] = useState("");
 
+  const companyName = localStorage.getItem("@companyName");
+  const companyId = localStorage.getItem("@companyId");
+
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get("/users");
+    const query =
+      companyName === "Administrador"
+        ? "/users"
+        : `/users?companyId=${companyId}`;
+
+    const response = await api.get(query);
 
     setState(response.data);
     setLoading(false);
@@ -76,6 +84,7 @@ const List = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const data = state.map((row) => ({

@@ -23,7 +23,10 @@ const New = () => {
   const getData = async () => {
     setLoading(true);
 
-    const unitResponse = await api.get("/unit");
+    const query =
+      companyName !== "Administrador" ? `/unit?company=${companyId}` : "/unit";
+
+    const unitResponse = await api.get(query);
     const companyResponse = await api.get("/company");
 
     setUnities(unitResponse.data);
@@ -33,6 +36,7 @@ const New = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onFinish = async (values) => {

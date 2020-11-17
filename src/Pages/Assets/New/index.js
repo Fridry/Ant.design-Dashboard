@@ -42,10 +42,18 @@ const New = () => {
   const getData = async () => {
     setLoading(true);
 
-    const unitResponse = await api.get("/unit");
+    const queryUnit =
+      companyName !== "Administrador" ? `/unit?company=${companyId}` : "/unit";
+
+    const queryUser =
+      companyName !== "Administrador"
+        ? `/users?companyId=${companyId}`
+        : "/users";
+
+    const unitResponse = await api.get(queryUnit);
     const companyResponse = await api.get("/company");
     const categoryResponse = await api.get("/category");
-    const userResponse = await api.get("/users");
+    const userResponse = await api.get(queryUser);
 
     setUnities(unitResponse.data);
     setCompanies(companyResponse.data);
@@ -57,6 +65,7 @@ const New = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onFinish = async (values) => {
