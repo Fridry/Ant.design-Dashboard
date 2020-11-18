@@ -215,24 +215,6 @@ const New = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
-                name="unit"
-                label="Unidade"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  placeholder="Selecione uma unidade"
-                  allowClear
-                  loading={loading}
-                >
-                  {unities.map((unit) => (
-                    <Option value={unit._id} key={unit._id}>
-                      {unit.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-
               {companyName === "Administrador" && (
                 <Form.Item
                   name="company"
@@ -252,6 +234,24 @@ const New = () => {
                   </Select>
                 </Form.Item>
               )}
+
+              <Form.Item
+                name="unit"
+                label="Unidade"
+                rules={[{ required: true }]}
+              >
+                <Select
+                  placeholder="Selecione uma unidade"
+                  allowClear
+                  loading={loading}
+                >
+                  {unities.map((unit) => (
+                    <Option value={unit._id} key={unit._id}>
+                      {unit.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
               <Form.Item
                 name="responsible"

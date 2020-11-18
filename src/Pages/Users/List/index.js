@@ -93,6 +93,7 @@ const List = () => {
     email: row.email,
     phoneNumber: row.phoneNumber,
     unit: row.unit ? row.unit.name : "",
+    company: row.company ? row.company.name : "",
   }));
 
   const isEditing = (record) => record.key === editingKey;
@@ -228,6 +229,14 @@ const List = () => {
       render: (_, record) => actions(record),
     },
   ];
+
+  if (companyName === "Administrador")
+    columns.splice(1, 0, {
+      title: "Empresa",
+      dataIndex: "company",
+      sorter: (a, b) => sorter(a.name, b.name),
+      key: "company",
+    });
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
