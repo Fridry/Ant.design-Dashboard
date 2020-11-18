@@ -17,6 +17,8 @@ const Home = () => {
     history.push("/login");
   }
 
+  const chartQuery = `?companyId=${companyId}`;
+
   return (
     <div>
       <Layout>
@@ -29,7 +31,7 @@ const Home = () => {
 
         <Divider />
 
-        <Chart />
+        {companyName !== "Administrador" && <Chart query={chartQuery} />}
       </Layout>
     </div>
   );

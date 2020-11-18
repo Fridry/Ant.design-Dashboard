@@ -32,13 +32,11 @@ const List = () => {
   const getData = async () => {
     setLoading(true);
 
-    const response = await api.get(`asset?company=${companyId}`);
+    const response = await api.get(`asset?companyId=${companyId}`);
 
     setState(response.data);
     setLoading(false);
   };
-
-  // console.log(state);
 
   useEffect(() => {
     getData();

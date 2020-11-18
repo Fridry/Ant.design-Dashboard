@@ -11,6 +11,7 @@ import NewCategory from "./Pages/Category/New";
 import ListCategory from "./Pages/Category/List";
 import NewUnit from "./Pages/Unit/New";
 import ListUnit from "./Pages/Unit/List";
+import InfoUnit from "./Pages/Unit/Info";
 import NewUser from "./Pages/Users/New";
 import ListUser from "./Pages/Users/List";
 import NewAsset from "./Pages/Assets/New";
@@ -58,6 +59,8 @@ const Routes = () => {
         <Route exact path="/user/new">
           <NewUser />
         </Route>
+
+        <Route exact path="/unit/info/:id" component={InfoUnit} />
 
         <Route exact path="/user/list">
           <ListUser />

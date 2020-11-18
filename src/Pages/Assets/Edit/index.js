@@ -29,6 +29,9 @@ const Edit = ({ location }) => {
 
   const history = useHistory();
 
+  const companyName = localStorage.getItem("@companyName");
+  const companyId = localStorage.getItem("@companyId");
+
   const [search, setSearch] = useState({
     data: [],
     value: "",
@@ -69,9 +72,17 @@ const Edit = ({ location }) => {
   const getData = async () => {
     setLoading(true);
 
-    const unitResponse = await api.get("/unit");
+    const queryUnit =
+      companyName !== "Administrador" ? `/unit?company=${companyId}` : "/unit";
+
+    const queryUser =
+      companyName !== "Administrador"
+        ? `/users?companyId=${companyId}`
+        : "/users";
+
+    const unitResponse = await api.get(queryUnit);
     const categoryResponse = await api.get("/category");
-    const userResponse = await api.get("/users");
+    const userResponse = await api.get(queryUser);
 
     setUnities(unitResponse.data);
     setCategories(categoryResponse.data);
@@ -82,6 +93,7 @@ const Edit = ({ location }) => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onFinish = async (values) => {
@@ -90,25 +102,17 @@ const Edit = ({ location }) => {
 
       form.resetFields();
 
-      message.info("Ativo cadastrada com sucesso.");
+      message.info("Ativo atualizado com sucesso.");
 
       goBack();
     } catch (error) {
-      message.error("Erro ao cadastrar ativo, tente novamente.");
+      message.error("Erro ao atualizar ativo, tente novamente.");
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    message.error("Ocorreu um erro ao cadastrar ativo, tente novamente.");
+    message.error("Ocorreu um erro ao atualizar ativo, tente novamente.");
   };
-
-  // const fetchUser = async (value) => {
-  //   setSearch({ data: [], fetching: true });
-
-  //   const response = await api.get("/users");
-
-  //   setSearch({ data: response.data, fetching: false });
-  // };
 
   const handleChange = (value) => {
     setSearch({
@@ -213,16 +217,17 @@ const Edit = ({ location }) => {
                 ]}
               >
                 <Input />
-                <img
-                  src={image}
-                  alt="Asset"
-                  style={{
-                    width: 300,
-                    display: "block",
-                    margin: "20px auto",
-                  }}
-                />
               </Form.Item>
+
+              <img
+                src={image}
+                alt="Asset"
+                style={{
+                  width: 300,
+                  display: "block",
+                  margin: "20px auto",
+                }}
+              />
 
               <Form.Item
                 label="Nível de Saúde"

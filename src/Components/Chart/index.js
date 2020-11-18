@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Typography, Card, Statistic, Row, Col } from "antd";
@@ -9,9 +9,27 @@ import {
   StopOutlined,
 } from "@ant-design/icons";
 
+import api from "../../services/api";
+
 const { Title } = Typography;
 
-const Chart = () => {
+const Chart = ({ query }) => {
+  const [info, setInfo] = useState({});
+  // Estável (hs >= 80), Em Alerta (60 <hs < 80) e Críticos (hs <= 60)
+
+  const getData = async () => {
+    const response = await api.get(`/chart${query}`);
+
+    setInfo(response.data);
+  };
+
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { alerta, critico, estavel, total } = info;
+
   const options = {
     chart: {
       type: "column",
@@ -51,16 +69,19 @@ const Chart = () => {
         colorByPoint: true,
         data: [
           {
-            name: "Disponíveis",
-            y: 230,
+            name: "Estável",
+            y: estavel,
+            color: "#52c41a",
           },
           {
-            name: "Em manutenção",
-            y: 25,
+            name: "Em Alerta",
+            y: alerta,
+            color: "#faad14",
           },
           {
-            name: "Desativados",
-            y: 33,
+            name: "Crítico",
+            y: critico,
+            color: "#ff4d4f",
           },
         ],
       },
@@ -68,7 +89,7 @@ const Chart = () => {
   };
 
   return (
-    <>
+    <hs>
       <Row gutter={16} style={{ textAlign: "center" }}>
         <Col span={6}>
           <Card>
@@ -78,7 +99,7 @@ const Chart = () => {
                   Ativos cadastrados
                 </Title>
               }
-              value={112893}
+              value={total}
               prefix={<MenuUnfoldOutlined style={{ color: "#1890ff" }} />}
             />
           </Card>
@@ -92,7 +113,7 @@ const Chart = () => {
                   Ativos Disponíveis
                 </Title>
               }
-              value={112893}
+              value={estavel}
               prefix={<CheckCircleOutlined style={{ color: "#52c41a" }} />}
             />
           </Card>
@@ -106,7 +127,7 @@ const Chart = () => {
                   Ativos Em manutenção
                 </Title>
               }
-              value={112893}
+              value={alerta}
               prefix={<WarningOutlined style={{ color: "#faad14" }} />}
             />
           </Card>
@@ -120,7 +141,7 @@ const Chart = () => {
                   Ativos Desativados
                 </Title>
               }
-              value={112893}
+              value={critico}
               prefix={<StopOutlined style={{ color: "#ff4d4f" }} />}
             />
           </Card>
@@ -137,7 +158,7 @@ const Chart = () => {
       >
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Card>
-    </>
+    </hs>
   );
 };
 

@@ -13,7 +13,6 @@ const { Title } = Typography;
 const List = () => {
   const [state, setState] = useState({});
   const [unities, setUnities] = useState([]);
-  const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
@@ -23,14 +22,10 @@ const List = () => {
 
     const unitResponse = await api.get(`/unit?company=${id}`);
     const companyResponse = await api.get(`/company/${id}`);
-    const assetsResponse = await api.get(`asset?company=${id}`);
 
     setUnities(unitResponse.data);
     setState(companyResponse.data);
-    setAssets(assetsResponse.data);
     setLoading(false);
-
-    console.log(assets);
   };
 
   useEffect(() => {
@@ -86,6 +81,8 @@ const List = () => {
     },
   ];
 
+  const chartQuery = `?companyId=${id}`;
+
   const { name, email, phoneNumber, address, city } = state;
 
   return (
@@ -124,7 +121,7 @@ const List = () => {
 
             <Divider />
 
-            <Chart />
+            <Chart query={chartQuery} />
           </Card>
         </Col>
       </Row>

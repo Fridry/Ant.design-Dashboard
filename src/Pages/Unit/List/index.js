@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import {
   Button,
@@ -19,6 +20,7 @@ import {
   DeleteOutlined,
   CheckOutlined,
   CloseOutlined,
+  InfoOutlined,
 } from "@ant-design/icons";
 
 import Layout from "../../../Components/Layout";
@@ -167,6 +169,20 @@ const List = () => {
       </Space>
     ) : data.length >= 1 ? (
       <Space size="middle" align="center">
+        <Link
+          to={{
+            pathname: `/unit/info/${record.key}`,
+          }}
+        >
+          <Button
+            type="primary"
+            icon={<InfoOutlined />}
+            size={25}
+            style={{ border: "none" }}
+            title="Detalhes"
+          />
+        </Link>
+
         <Button
           type="primary"
           icon={<EditOutlined />}
